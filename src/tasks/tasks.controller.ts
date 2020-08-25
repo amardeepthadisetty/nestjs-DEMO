@@ -14,10 +14,10 @@ export class TasksController {
     //getAllTasks(): Task[]{
     getTasks(@Query('') taskFilter: TaskFilterDto ): Task[]{
         if( Object.keys(taskFilter).length ){
-            console.log("INSIDE OBJECT KEYS AND THE FILTERED OPTIONS GIVEN ARE: ", taskFilter);
+            //console.log("INSIDE OBJECT KEYS AND THE FILTERED OPTIONS GIVEN ARE: ", taskFilter);
             return this.tasksService.getFilteredTasks( taskFilter );
         }else{
-            console.log("INSIDE ELSE PART ", taskFilter);
+            //console.log("INSIDE ELSE PART ", taskFilter);
             return this.tasksService.getAllTasks();
         }
     }
