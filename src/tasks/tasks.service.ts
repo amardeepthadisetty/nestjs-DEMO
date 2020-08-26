@@ -10,7 +10,7 @@ export class TasksService {
 
     getFilteredTasks(filteredTaskDto: TaskFilterDto){
         let tasks = this.getAllTasks();
-        const {status, search} = filteredTaskDto;
+        const {status, search} = filteredTaskDto; 
 
         if( status ){
             tasks = tasks.filter(task => task.status===status);
