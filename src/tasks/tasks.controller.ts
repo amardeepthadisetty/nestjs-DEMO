@@ -13,7 +13,8 @@ export class TasksController {
 
     @Get()
     //getAllTasks(): Task[]{
-    getTasks(@Query('') taskFilter: TaskFilterDto ): Task[]{
+    @UsePipes(ValidationPipe)
+    getTasks(@Query() taskFilter: TaskFilterDto ): Task[]{
         if( Object.keys(taskFilter).length ){
             //console.log("INSIDE OBJECT KEYS AND THE FILTERED OPTIONS GIVEN ARE: ", taskFilter);
             return this.tasksService.getFilteredTasks( taskFilter );
