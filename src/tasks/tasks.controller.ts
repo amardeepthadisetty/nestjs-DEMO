@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe, NotFoundException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskFilterDto } from './dto/task-filter.dto';
@@ -10,6 +10,13 @@ import { TaskStatus } from './task-status.enum';
 export class TasksController {
     constructor(private tasksService: TasksService){
 
+    }
+
+
+    @Get()
+    @UsePipes(ValidationPipe)
+    async getTasks(@Query() taskFilter: TaskFilterDto ): Promise<Task[]>{
+            return await this.tasksService.getAllTasks(taskFilter);
     }
 
     @Get('/:id')
@@ -30,7 +37,21 @@ export class TasksController {
         return this.tasksService.createTask(createTaskDto);
     }
 
-   
+    @Patch('/:id/status')
+    async updateTaskStatus(@Param('id', ParseIntPipe) id: number,@Body('status', TaskStatusValidationPipe) status: TaskStatus): Promise<Task> {
+        return await this.tasksService.updateTaskStatusById(id, status);
+    }
+
+    @Delete('/:id')
+    async deleteTaskById(@Param('id', ParseIntPipe) id: number) {
+        const result = await this.tasksService.deleteTaskById(id);
+        if( result.affected>0){
+            return ({'message': `Task with id ${id} is deleted successfully.`});
+        }else{
+            
+            throw new NotFoundException(`Task with id ${id} not found.`);
+        }
+    }
    /*  @Get()
     //getAllTasks(): Task[]{
     @UsePipes(ValidationPipe)
@@ -44,18 +65,5 @@ export class TasksController {
         }
     }
 
-    
-
-    @Delete('/:id')
-    deleteTaskById(@Param('id') id: string): boolean {
-        return this.tasksService.deleteTaskById(id);
-    }
-
-
-    
-
-    @Patch('/:id/status')
-    updateTaskStatus(@Param('id') id: string,@Body('status', TaskStatusValidationPipe) status: TaskStatus): Task {
-        return this.tasksService.updateTaskStatusById(id, status);
-    } */
+     */
 }
