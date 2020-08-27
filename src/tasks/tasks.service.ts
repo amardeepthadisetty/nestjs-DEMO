@@ -8,7 +8,7 @@ import { TaskFilterDto } from './dto/task-filter.dto';
 export class TasksService {
     private tasks: Task[] = [];
 
-    getFilteredTasks(filteredTaskDto: TaskFilterDto){
+    getFilteredTasks(filteredTaskDto: TaskFilterDto): Task[]{
         let tasks = this.getAllTasks();
         const {status, search} = filteredTaskDto; 
 
@@ -31,9 +31,7 @@ export class TasksService {
         return this.tasks;
     }
 
-    generateRandom(){
-        let r = Math.random();
-    }
+    
 
     getTaskById(id: string): Task{
         const found =  this.tasks.find(task => task.id===id );
